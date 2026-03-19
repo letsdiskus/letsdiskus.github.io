@@ -66,3 +66,7 @@ footer {
 .dark .card {
   background: #1f2937;
 }
+.card:hover {
+  transform: scale(1.03);
+  transition: 0.3s;
+}
