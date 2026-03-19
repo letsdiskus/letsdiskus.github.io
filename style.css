@@ -58,3 +58,11 @@ footer {
   background: #1f2937;
   color: white;
 }
+.dark {
+  background: #111;
+  color: white;
+}
+
+.dark .card {
+  background: #1f2937;
+}
