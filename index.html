@@ -61,5 +61,49 @@
     });
   }
 </script>
+  <script>
+async function loadBlogs() {
+    const container = document.getElementById('posts-container');
+    const username = 'YOUR_GITHUB_USERNAME'; // Apna Github name yahan likhein
+    const repo = 'YOUR_REPO_NAME'; // Apne Repo ka naam yahan likhein
+    const folder = 'blog';
+
+    try {
+        // 1. GitHub API se files ki list mangwana
+        const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${folder}`);
+        const files = await response.json();
+
+        if (!Array.isArray(files)) {
+            container.innerHTML = "Koi post nahi mili.";
+            return;
+        }
+
+        container.innerHTML = ''; // Loading hatane ke liye
+
+        // 2. Har file ka data fetch karna
+        for (const file of files) {
+            if (file.name.endsWith('.md')) {
+                const res = await fetch(file.download_url);
+                const markdownText = await res.text();
+                
+                // Markdown ko HTML mein convert karna (marked library se)
+                const htmlContent = marked.parse(markdownText);
+
+                const postDiv = document.createElement('div');
+                postDiv.className = 'blog-card';
+                postDiv.style = "border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 8px;";
+                postDiv.innerHTML = htmlContent;
+                
+                container.appendChild(postDiv);
+            }
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        container.innerHTML = "Posts load karne mein galti hui.";
+    }
+}
+
+loadBlogs();
+</script>
 </body>
 </html>
